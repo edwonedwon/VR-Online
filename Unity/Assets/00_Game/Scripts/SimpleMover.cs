@@ -4,8 +4,7 @@ using BeardedManStudios.Network;
 public class SimpleMover
     : MonoBehaviour
 {
-    private Rigidbody rigidbody;
-    private Vector3 velocity;
+    private Rigidbody rb;
 
     private void Start()
     {
@@ -13,9 +12,9 @@ public class SimpleMover
 
 	private void Update()
 	{
-        if (rigidbody == null)
+        if (rb == null)
         {
-            rigidbody = GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
         }
 
         UpdateRB();
@@ -25,30 +24,30 @@ public class SimpleMover
 
     private void UpdateRB()
     {
-        if (!rigidbody)
+        if (!rb)
             return;
 
-        //rigidbody.velocity = velocity;
-        //rigidbody.AddForce(Vector3.up, ForceMode.VelocityChange);
+        //rb.velocity = velocity;
+        //rb.AddForce(Vector3.up, ForceMode.VelocityChange);
 
         var force = 250.0f;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
-            rigidbody.AddForce(Vector3.up * force, ForceMode.Acceleration);
+            rb.AddForce(Vector3.up * force, ForceMode.Acceleration);
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
-            rigidbody.AddForce(Vector3.down * force, ForceMode.Acceleration);
+            rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
-            rigidbody.AddTorque(Vector3.right * force, ForceMode.Acceleration);
+            rb.AddTorque(Vector3.right * force, ForceMode.Acceleration);
 
 		if (Input.GetKeyDown(KeyCode.LeftArrow))
-            rigidbody.AddTorque(Vector3.left * force, ForceMode.Acceleration);
+            rb.AddTorque(Vector3.left * force, ForceMode.Acceleration);
 	}
 
     private void UpdateTransform()
     {
-        if (rigidbody)
+        if (rb)
             return;
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))

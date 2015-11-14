@@ -2,22 +2,26 @@
 using BeardedManStudios.Network;
 
 public class NetworkPlayerInstance
-	: SimpleNetworkedMonoBehavior
+	: NetworkedMonoBehavior
 {
     public void OnConnect()
     {
         var hue = name.GetHashCode() % 255;
         var color = HueToRgb(hue / 255.0f);
         var renderer = GetComponent<Renderer>();
-        var material = renderer.material;
 
-        material.color = color;
+        if (renderer)
+        {
+            renderer.material.color = color;
+        }
     }
 
     public void Update()
     {
         if (!IsOwner)
             return;
+
+        SyncVR();
 
         // sync position from controllers
         var rigidbody = GetComponent<Rigidbody>();
@@ -27,6 +31,40 @@ public class NetworkPlayerInstance
         if (Input.GetKeyDown(KeyCode.DownArrow)) rigidbody.AddForce(Vector3.down * 250.0f, ForceMode.Acceleration);
         if (Input.GetKeyDown(KeyCode.LeftArrow)) rigidbody.AddTorque(Vector3.left * 250.0f, ForceMode.Acceleration);
         if (Input.GetKeyDown(KeyCode.RightArrow)) rigidbody.AddTorque(Vector3.right * 250.0f, ForceMode.Acceleration);
+    }
+
+
+    public void SyncVR()
+    {
+        if (!SteamVR.active)
+            return;
+
+        var controller0 = transform.FindChild("Controller0");
+        var controller1 = transform.FindChild("Controller1");
+        var head = transform.FindChild("Head");
+
+        var steam_controller_manager = FindObjectOfType<SteamVR_ControllerManager>();
+        var steam_controller0 = steam_controller_manager.left;
+        var steam_controller1 = steam_controller_manager.right;
+        var steam_cam = FindObjectOfType<SteamVR_Camera>();
+
+        if (steam_controller0)
+        {
+            controller0.transform.position = steam_controller0.transform.position;
+            controller0.transform.rotation = steam_controller0.transform.rotation;
+        }
+
+        if (steam_controller1)
+        {
+            controller1.transform.position = steam_controller1.transform.position;
+            controller1.transform.rotation = steam_controller1.transform.rotation;
+        }
+
+        if (steam_cam)
+        {
+            head.transform.position = steam_cam.transform.position;
+            head.transform.rotation = steam_cam.transform.rotation;
+        }
     }
 
     private Color HueToRgb(float hue)

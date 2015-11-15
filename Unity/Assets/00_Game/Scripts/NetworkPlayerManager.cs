@@ -11,8 +11,6 @@ public class NetworkPlayerManager
     {
         Debug.Assert(PlayerPrefab != null);
 
-        PlayerPrefab.name = SystemInfo.deviceName;
-
         Networking.Instantiate(PlayerPrefab, NetworkReceivers.AllBuffered, OnInstantiatePlayer);
     }
 

@@ -16,8 +16,10 @@ public class NetworkPlayerInstance
         }
     }
 
-    public void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (!IsOwner)
             return;
 
@@ -42,6 +44,9 @@ public class NetworkPlayerInstance
         var controller0 = transform.FindChild("Controller0");
         var controller1 = transform.FindChild("Controller1");
         var head = transform.FindChild("Head");
+
+        if (!head)
+            return;
 
         var steam_controller_manager = FindObjectOfType<SteamVR_ControllerManager>();
         var steam_controller0 = steam_controller_manager.left;

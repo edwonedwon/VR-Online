@@ -13,6 +13,10 @@ public class NVRDebugTestEditor
 
     public override void OnInspectorGUI()
     {
+        // networking doesn't work in editor mode properly
+        if (!Application.isPlaying)
+            return;
+
         var obj = target as NVRDebugTest;
 
         base.OnInspectorGUI();
@@ -86,14 +90,6 @@ public class NVRDebugTest
 
     public void Start()
     {
-        if (Host)
-        {
-            StartHost();
-        }
-        else
-        {
-            StartClient();
-        }
     }
 
     public NetWorker StartHost()

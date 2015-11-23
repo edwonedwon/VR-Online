@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 using BeardedManStudios.Network;
 
 [CustomEditor(typeof(NVRDebugTest))]
@@ -26,7 +27,7 @@ public class NVRDebugTestEditor
             if (GUILayout.Button("Host"))
                 net = obj.StartHost();
             if (GUILayout.Button("Client"))
-                net = obj.StartHost();
+                net = obj.StartClient();
         }
         else
         {
@@ -86,6 +87,8 @@ public class NVRDebugTest
     public bool RelayToAll;
     public bool UseNAT;
 
+    public List<NetWorker> Workers = new List<NetWorker>();
+
     private string OverrideIPParam { get { return string.IsNullOrEmpty(OverrideIP) ? null : OverrideIP; } }
 
     public void Start()
@@ -101,6 +104,8 @@ public class NVRDebugTest
         nw.connected += () => Debug.Log("connected");
         nw.disconnected += () => Debug.Log("disconnected");
 
+        Workers.Add(nw);
+
         return nw;
     }
 
@@ -112,6 +117,8 @@ public class NVRDebugTest
 
         nw.connected += () => Debug.Log("connected");
         nw.disconnected += () => Debug.Log("disconnected");
+
+        Workers.Add(nw);
 
         return nw;
     }
